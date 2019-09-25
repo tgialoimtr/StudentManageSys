@@ -2,34 +2,34 @@
  * Created by asus on 2017/8/6.
  */
 
-//引入mongoose模块
 var mongoose=require('mongoose')
 
-//数据库连接地址  链接到myStudent数据库
+//Database connection address Link to myStudent database
 var DB_URL='mongodb://localhost:27017/myStudent'
-//数据库连接
+//Database Connectivity
 mongoose.connect(DB_URL)
 
-//连接成功终端显示消息
+//Successful connection terminal displays a message
 mongoose.connection.on('connected',function () {
     console.log('mongoose connection open to '+DB_URL)
 })
-//连接失败终端显示消息
+//Connection failed terminal display message
 mongoose.connection.on('error',function () {
     console.log('mongoose error ')
 })
-//连接断开终端显示消息
+//Connection disconnected terminal display message
 mongoose.connection.on('disconnected',function () {
     console.log('mongoose disconnected')
 })
 
-//创建一个Schema  每一个schema会一一对应mongo中的collection
+//Create a schema
+//Each schema will correspond to the collection in mongo
 var schema=mongoose.Schema
 
-//实例化一个Schema
+//Instantiate a Schema
 var studentSchema=new schema(
     {
-        //设置studentSchema信息的数据格式
+        //Set the data format of the studentSchema information
         name:{type:String},
         sex:{type:String},
         age:{type:Number},
@@ -37,16 +37,16 @@ var studentSchema=new schema(
         email:{type:String},
         other:{type:String},
     },
-    //{versionKey: false}是干嘛用？如果不加这个设置，我们通过mongoose第一次创建某个集合时，
-    // 它会给这个集合设定一个versionKey属性值，我们不需要，所以不让它显示
+    //{versionKey: false}Why use it? If you don't add this setting, we will create a collection for the first time through mongoose.
+    // It will set a versionKey property value for this collection, we don't need it, so don't let it show
     {
         versionKey:false
     }
 )
 
-//生成一个具体user的model并导出
-//第一个参数是集合名，在数据库中会自动加s
-//把Model名字字母全部变小写和在后面加复数s
+//Generate a specific user model and export
+//The first parameter is the collection name, which is automatically added in the database.
+//Change the name of the Model name to lowercase and add the plural s after it.
 var student=mongoose.model('student',studentSchema)
-//将Student的model导出
+//Export the student's model
 module.exports=student

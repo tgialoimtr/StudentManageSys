@@ -13,47 +13,47 @@ app.use(bodyParser.json())
 
 app.use(expres.static('www'))
 
-// 允许跨域访问／／／
+// Allow cross-domain access／／／
 app.all('/api/*', function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Headers', 'x-Request-with')
     res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
     res.header('X-Powered-By', '4.15.2')
     res.header('Content-Type', 'application/json;charset=utf-8')
-    next()   //执行下一个中间件。
+    next()   //Execute the next middleware
 })
 
-//首页展示获取数据
+//Home page to get data
 app.post('/index',function (req,res) {
-    //mongoose 数据查找
+    //mongoose Data lookup
     student.find({}).exec(function (error,data) {
         if (error){
-            console.log('数据获取失败'+error)
+            console.log('Data acquisition failed'+error)
         }
         else{
             res.json({
                 status:'y',
-                message:'查询成功',
-                //传递返回的数据
+                message:'search successful',
+                //Pass the returned data
                 data:data
             })
         }
     })
 })
 
-//修改页面 获取数据
+//Modify page Get data
 app.post('/modify',function (req,res) {
-    //mongoose根据条件进行查找
+    //mongoose Find by condition
     student.find({_id: req.body.id}).exec(function (error,data) {
         console.log('2')
         if (error){
-            console.log('数据获取失败'+error)
+            console.log('Data acquisition failed'+error)
         }
         else{
             console.log(data)
             res.json({
                 status:'y',
-                message:'查询成功',
+                message:'search successful',
                 data:data
             })
             console.log(4)
@@ -61,13 +61,13 @@ app.post('/modify',function (req,res) {
     })
 })
 
-//修改提交修改数据库
+//Modify the commit modification database
 app.post('/modifyStu',function (req,res) {
     console.log('1')
     console.log(req.body)
-    //查询的条件
+    //Query conditions
     var whereStr={_id:req.body.id}
-    //更新的内容
+    //Updated content
     var updateStr={
         $set:{
             name:req.body.name,
@@ -79,72 +79,72 @@ app.post('/modifyStu',function (req,res) {
 
         }
     }
-    //对数据库进行更新
+    //Update the database
     student.update(whereStr,updateStr,function (error) {
         if (error){
-            console.log('数据修改失败:'+error)
+            console.log('Data modification failed:'+error)
             res.json({
                 status:'y',
-                message:'修改失败',
+                message:'fail to edit',
                 data:req.body
             })
         }
         else{
-            console.log('数据修改成功')
+            console.log('Data modification succeeded')
             res.json({
                 status:'y',
-                message:'修改成功',
+                message:'Successfully modified',
                 data:req.body
             })
         }
     })
 })
 
-//删除数据库其中的项
+//Delete items in the database
 app.post('/del',function (req,res) {
-    //mongoose根据指定条件进行删除
+    //mongoose Delete according to specified conditions
     student.remove({_id: req.body.id},function(error){
         if (error){
-            console.log('数据获取失败'+error)
+            console.log('Data acquisition failed'+error)
             res.json({
                 status:'y',
-                message:'删除不成功',
+                message:'Delete is not successful',
             })
         }
         else{
             res.json({
                 status:'y',
-                message:'删除成功',
+                message:'successfully deleted',
             })
         }
     })
 })
 
-//导航栏search操作
+//Navigation bar search operation
 app.post('/findName',function (req,res) {
     console.log(req.body.searchName)
     student.find({name: req.body.searchName}).exec(function (error,data) {
         if (error){
-            console.log('查询失败'+error)
+            console.log('Query failed'+error)
             res.json({
                 status:'y',
-                message:'查询失败',
+                message:'Query failed',
             })
         }
         else{
             res.json({
                 status:'y',
-                message:'查询成功',
+                message:'search successful',
                 data:data
             })
         }
     })
 })
 
-//添加数据库操作
+//Add database operation
 app.post('/addStu',function (req,res) {
     console.log(req.body)
-    //实例化一个student
+    //Instantiate one student
     var newStu=new student({
         name:req.body.name,
         sex:req.body.sex,
@@ -154,28 +154,28 @@ app.post('/addStu',function (req,res) {
         other:req.body.other,
 
     })
-    //对实例化的内容进行保存
+    //Save the instantiated content
     newStu.save(function (error) {
         if (error){
-            console.log('数据添加失败:'+error)
+            console.log('Data addition failed:'+error)
             res.json({
                 status:'y',
-                message:'添加失败',
+                message:'add failed',
                 data:req.body
             })
         }
         else {
-            console.log('数据添加成功')
+            console.log('Data added successfully')
             res.json({
                 status:'y',
-                message:'添加成功',
+                message:'Added successfully',
                 data:req.body
             })
         }
     })
 })
 
-//服务器监听端口
+//Server listening port
 app.listen(3000,()=>{
     console.log('node is ok')
 })
